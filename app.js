@@ -51,3 +51,5 @@ $('#export').onclick=()=>{let u=URL.createObjectURL(new Blob([JSON.stringify({ve
 $('#import').onchange=async e=>{try{let v=JSON.parse(await e.target.files[0].text());if(v.version!==1||!v.progress||!v.edits||!v.drafts)throw Error();for(let k of ['progress','edits','drafts']){if(typeof v[k]!=='object'||Array.isArray(v[k])||v[k]===null)throw Error()}for(let [id,x] of Object.entries(v.edits)){if(!base.some(a=>a.id===id)||typeof x.text!=='string'||typeof x.chapter!=='string'||!['1','2','3'].includes(String(x.grade)))throw Error()}if(!confirm('导入会合并备份，同一条目的本地数据将被备份中的内容替换。继续吗？'))return;for(let k of ['progress','edits','drafts'])Object.assign(store[k],v[k]);save();$('#migrate').hidden=!Object.keys(store.edits).length;chapters();filter();alert('学习进度已导入。若含旧版文字校订，请点击“写入旧版校订”保存到题库文件。')}catch(err){alert('无法读取备份，请选择本程序导出的有效 JSON 文件。')}e.target.value=''};
 chapters();filter();
 
+
+$('#support').onclick=()=>$('#supportDialog').showModal();
